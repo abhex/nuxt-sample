@@ -40,5 +40,8 @@ module.exports = {
       }
     }
   },
-  plugins: ['~/plugins/vuetify']
+  plugins: ['~/plugins/vuetify'],
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://192.168.1.150:4503'
+  }
 }

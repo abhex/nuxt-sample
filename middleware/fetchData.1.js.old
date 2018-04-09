@@ -53,7 +53,6 @@ export default function ({store}) {
 
 
 
-
 import * as JsonLoaded from '../static/jenn_air.infinity.json'
 import axios from 'axios'
 
@@ -64,27 +63,18 @@ function keysThatMatch(data) {
 
 
 export default function ({store}) {
-  // console.log("I AM HERE INSIDE THE MIDDLEWARE", JsonLoaded)
-  
-  // console.log("STORREEEEE", store.state)
-
   axios.get('http://192.168.100.28:4503/etc/commerce/products/jenn_air.infinity.json')
   .then(function (response) {
-    // console.log("AXIOS Response",response);
     let responseData = response.data
     let keys = keysThatMatch(responseData)
     
     Object.keys(responseData).forEach( key => {
       let pattern = "^[^:]*$"
       if (key.match(pattern)){
-        
-        // console.log("STOREEEEEEEE$$$",store.state)
-        console.log("STOREEEEEEEEPARENT CAT", store.state.parentCategories)
         store.commit('addParentCategories', responseData[key])
         Object.keys( responseData[key] ).forEach( key2 => {
           if (key2.match(pattern)) {
             store.commit('addL1Categories', responseData[key][key2])
-            // console.log( responseData[key][key2])
             Object.keys( responseData[key][key2] ).forEach( key3 => {
               if (key3.match(pattern) && key3 != "display_image") {
                 store.commit('addL2Categories', responseData[key][key2][key3])
@@ -104,8 +94,6 @@ export default function ({store}) {
     console.log(error);
   });
 }
-
-
 
 
 

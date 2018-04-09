@@ -3,15 +3,13 @@
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo'
 import Content from '~/components/Content'
 
 export default {
   components: {
-    Content, AppLogo
-  }
-  // ,
-  // midlleware: 'fetchData'
+    Content
+  },
+  midlleware: 'fetchData'
 }
 </script>
 

@@ -1,5 +1,4 @@
 import * as JsonLoaded from '../static/jenn_air.infinity.json'
-import axios from 'axios'
 
 function keysThatMatch(data) {
   let pattern = "^[^:]*$"
@@ -8,38 +7,33 @@ function keysThatMatch(data) {
 
 
 export default function ({store}) {
-  axios.get('http://192.168.100.28:4503/etc/commerce/products/jenn_air.infinity.json')
-  .then(function (response) {
-    let responseData = response.data
-    let keys = keysThatMatch(responseData)
-    
-    Object.keys(responseData).forEach( key => {
-      let pattern = "^[^:]*$"
-      if (key.match(pattern)){
-        store.commit('addParentCategories', responseData[key])
-        Object.keys( responseData[key] ).forEach( key2 => {
-          if (key2.match(pattern)) {
-            store.commit('addL1Categories', responseData[key][key2])
-            Object.keys( responseData[key][key2] ).forEach( key3 => {
-              if (key3.match(pattern) && key3 != "display_image") {
-                store.commit('addL2Categories', responseData[key][key2][key3])
-                Object.keys( responseData[key][key2][key3] ).forEach( key4 => {
-                  if (key4.match(pattern) && key4 != "display_image") {
-                    store.commit('addProducts', responseData[key][key2][key3][key4])
-                  }
-                })
-              }
-            })
-          }
-        })
-      }
-    });
-  })
-  .catch(function (error) {
-    console.log(error);
+  
+  // console.log("I AM HERE INSIDE THE MIDDLEWARE", JsonLoaded)
+  let keys = keysThatMatch(JsonLoaded)
+  console.log("STORREEEEE", store.state)
+  
+  Object.keys(JsonLoaded).forEach( key => {
+    let pattern = "^[^:]*$"
+    if (key.match(pattern)){
+      // console.log( "black", JsonLoaded[key] );
+      store.commit('addParentCategories', JsonLoaded[key])
+      Object.keys( JsonLoaded[key] ).forEach( key2 => {
+        if (key2.match(pattern)) {
+          store.commit('addL1Categories', JsonLoaded[key][key2])
+          // console.log( JsonLoaded[key][key2])
+          Object.keys( JsonLoaded[key][key2] ).forEach( key3 => {
+            if (key3.match(pattern) && key3 != "display_image") {
+              store.commit('addL2Categories', JsonLoaded[key][key2][key3])
+              Object.keys( JsonLoaded[key][key2][key3] ).forEach( key4 => {
+                if (key4.match(pattern) && key4 != "display_image") {
+                  store.commit('addProducts',JsonLoaded[key][key2][key3][key4])
+                  // console.log( JsonLoaded[key][key2][key3])
+                }
+              })
+            }
+          })
+        }
+      })
+    }
   });
 }
-
-
-
-
